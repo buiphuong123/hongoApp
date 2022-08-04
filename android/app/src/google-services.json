@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "245067012122",
+    "project_id": "languageapp-d3a70",
+    "storage_bucket": "languageapp-d3a70.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:245067012122:android:4beb0fa16177733c8619a3",
+        "android_client_info": {
+          "package_name": "com.languageapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "245067012122-ocflnj1hsinjtr2pjh4cnuqq6071v4u2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlQWoYkkkDrrINNoECKb94mxfla35MftE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "245067012122-ocflnj1hsinjtr2pjh4cnuqq6071v4u2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
