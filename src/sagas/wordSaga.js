@@ -61,6 +61,7 @@ function* getWord({payload}) {
         id: id,
     });
     const { data } = resp;
+
     if (data.code == 1) {
         yield put(getListWordSuccess(data.wordData));
         // yield call(saveLocal, data.wordData);
