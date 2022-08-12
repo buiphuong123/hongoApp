@@ -62,7 +62,44 @@ import {
 } from '../../../redux/actions/comment.action';
 import {useIsConnected} from 'react-native-offline';
 import {persistor} from '../../../redux/store';
+function memorySizeOf(obj) {
+  var bytes = 0;
 
+  function sizeOf(obj) {
+    if (obj !== null && obj !== undefined) {
+      switch (typeof obj) {
+        case 'number':
+          bytes += 8;
+          break;
+        case 'string':
+          bytes += obj.length * 2;
+          break;
+        case 'boolean':
+          bytes += 4;
+          break;
+        case 'object':
+          var objClass = Object.prototype.toString.call(obj).slice(8, -1);
+          if (objClass === 'Object' || objClass === 'Array') {
+            for (var key in obj) {
+              if (!obj.hasOwnProperty(key)) continue;
+              sizeOf(obj[key]);
+            }
+          } else bytes += obj.toString().length * 2;
+          break;
+      }
+    }
+    return bytes;
+  }
+
+  function formatByteSize(bytes) {
+    if (bytes < 1024) return bytes + ' bytes';
+    else if (bytes < 1048576) return (bytes / 1024).toFixed(3) + ' KiB';
+    else if (bytes < 1073741824) return (bytes / 1048576).toFixed(3) + ' MiB';
+    else return (bytes / 1073741824).toFixed(3) + ' GiB';
+  }
+
+  return formatByteSize(sizeOf(obj));
+}
 const HomeScreen = ({navigation}) => {
   const {colors} = useTheme();
   const dispatch = useDispatch();
@@ -76,9 +113,16 @@ const HomeScreen = ({navigation}) => {
   const wordList = useSelector(state => state.wordReducer.wordList);
   const grammarList = useSelector(state => state.grammarReducer.grammarList);
   const wordlevel = useSelector(state => state.wordReducer.wordlevel);
+  const vocal = useSelector(state => state.vocabularyReducer.vocabularyList);
+  const post = useSelector(state => state.postReducer.listPost);
   const [isend, setisEnd] = useState(false);
 
-  console.log('wordList', wordList);
+  // console.log('wordList', memorySizeOf(wordList));
+  // console.log('kanjiList', memorySizeOf(kanjiList));
+  // console.log('grammarList', memorySizeOf(grammarList));
+  // console.log('vocal', memorySizeOf(vocal));
+  // console.log('post', memorySizeOf(post));
+
   const readFile = async path => {
     setisEnd(true);
     const exists = await RNFS.exists(path);
@@ -283,7 +327,6 @@ const HomeScreen = ({navigation}) => {
         }
       });
   };
-console.log('persistor.getState().registry', persistor.getState().registry)
   const grammarRequest = () => {
     var level = 5;
     if (isN5 === 'checked') {
@@ -296,13 +339,13 @@ console.log('persistor.getState().registry', persistor.getState().registry)
       level = 2;
     }
 
-    console.log('grammar list day ne', grammarList.length, level);
-    console.log('level day ne ', level);
-    console.log(
-      'ben homscree la ',
-      grammarList.filter(e => e.level === level).length,
-      level,
-    );
+    // console.log('grammar list day ne', grammarList.length, level);
+    // console.log('level day ne ', level);
+    // console.log(
+    //   'ben homscree la ',
+    //   grammarList.filter(e => e.level === level).length,
+    //   level,
+    // );
     // dispatch(getListKanjiRequest(users._id, level, navigation));
     dispatch(getListGrammarLevel(grammarList.filter(e => e.level === level)));
     navigation.navigate('HomeGrammar', {level: level});

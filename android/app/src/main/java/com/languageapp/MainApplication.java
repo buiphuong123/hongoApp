@@ -6,6 +6,8 @@ import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.rnfs.RNFSPackage;
 import com.rnfs.RNFSPackage;
+import com.rnfs.RNFSPackage;
+import com.rnfs.RNFSPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
 
@@ -50,7 +52,9 @@ public class MainApplication extends Application implements ReactApplication {
 
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-        new MainReactPackage(), // <---- add comma
+        new MainReactPackage(),
+            new RNFSPackage(),
+            new RNFSPackage(), // <---- add comma
         new RNFSPackage() // <---------- add package
       );
     }
