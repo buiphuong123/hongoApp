@@ -14,6 +14,8 @@ import vocabularyReducer from './vocabularyReducer';
 import postReducer from './postReducer';
 import manageReducer from './manageReducer';
 import {reducer as network} from 'react-native-offline';
+import {persistReducer} from 'redux-persist';
+import FSStorage from 'redux-persist-fs-storage';
 
 const rootReducers = combineReducers({
   userReducer,
@@ -23,7 +25,15 @@ const rootReducers = combineReducers({
   commentReducer,
   grammarReducer,
   notifiReducer,
-  wordReducer,
+  // wordReducer,
+  wordReducer: persistReducer(
+    {
+      key: 'wordReducer',
+      storage: FSStorage(),
+      whitelist: ['wordList'],
+    },
+    wordReducer,
+  ),
   grammarquestionReducer,
   kanjiReducer,
   scheduleReducer,

@@ -12,11 +12,11 @@ const App = () => {
   return (
     <Provider store={Store}>
       <NetworkProvider>
-        <PersistGate persistor={persistor}>
+        {/* <PersistGate persistor={persistor}> */}
           <Home />
           <Toast ref={ref => Toast.setRef(ref)} />
           <GlobalLoading />
-        </PersistGate>
+        {/* </PersistGate> */}
       </NetworkProvider>
     </Provider>
   );

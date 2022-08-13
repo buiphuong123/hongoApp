@@ -100,6 +100,7 @@ function memorySizeOf(obj) {
 
   return formatByteSize(sizeOf(obj));
 }
+
 const HomeScreen = ({navigation}) => {
   const {colors} = useTheme();
   const dispatch = useDispatch();
@@ -113,8 +114,8 @@ const HomeScreen = ({navigation}) => {
   const wordList = useSelector(state => state.wordReducer.wordList);
   const grammarList = useSelector(state => state.grammarReducer.grammarList);
   const wordlevel = useSelector(state => state.wordReducer.wordlevel);
-  const vocal = useSelector(state => state.vocabularyReducer.vocabularyList);
-  const post = useSelector(state => state.postReducer.listPost);
+  // const vocal = useSelector(state => state.vocabularyReducer.vocabularyList);
+  // const post = useSelector(state => state.postReducer.listPost);
   const [isend, setisEnd] = useState(false);
 
   // console.log('wordList', memorySizeOf(wordList));
@@ -122,6 +123,7 @@ const HomeScreen = ({navigation}) => {
   // console.log('grammarList', memorySizeOf(grammarList));
   // console.log('vocal', memorySizeOf(vocal));
   // console.log('post', memorySizeOf(post));
+  console.log('wordlevel',wordlevel);
 
   const readFile = async path => {
     setisEnd(true);

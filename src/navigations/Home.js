@@ -20,6 +20,7 @@ import DrawerTab from './DrawerTab';
 import {navigationRef} from './NavigationService';
 import RootScreen from './RootScreen';
 import {delay} from '../utils/delay';
+import {showToastError, showToastSuccess} from '../helpers/toastHelper';
 
 const Home = props => {
   // const readFile = async (path) => {
@@ -39,7 +40,7 @@ const Home = props => {
   //     // setFileData(response); //set the value of response to the fileData Hook.
   // };
   const intervalTimeRef = useRef();
-
+  const isConnected = useIsConnected();
   const [isDarkTheme, setIsDarkTheme] = React.useState(false);
   const dispatch = useDispatch();
   // AsyncStorage.setItem('@language', isDarkTheme);
@@ -61,26 +62,32 @@ const Home = props => {
 
   // }
 
-//   const persist = useCallback(async () => {
-//     persistor.persist();
-//     await delay(15000);
-//     persistor.pause();
-//   }, []);
+  //   const persist = useCallback(async () => {
+  //     persistor.persist();
+  //     await delay(15000);
+  //     persistor.pause();
+  //   }, []);
 
-//   const isConnected = useIsConnected();
-//   useEffect(() => {
-//     if (isConnected && !intervalTimeRef.current) {
-//       intervalTimeRef.current = setInterval(() => {
-//         persist();
-//       }, 300000);
-//     } else {
-//       clearInterval(intervalTimeRef.current);
-//       persistor.pause();
-//     }
-//     return () => {
-//       intervalTimeRef.current && clearInterval(intervalTimeRef.current);
-//     };
-//   }, [isConnected]);
+  //   const isConnected = useIsConnected();
+  //   useEffect(() => {
+  //     if (isConnected && !intervalTimeRef.current) {
+  //       intervalTimeRef.current = setInterval(() => {
+  //         persist();
+  //       }, 300000);
+  //     } else {
+  //       clearInterval(intervalTimeRef.current);
+  //       persistor.pause();
+  //     }
+  //     return () => {
+  //       intervalTimeRef.current && clearInterval(intervalTimeRef.current);
+  //     };
+  //   }, [isConnected]);
+  useEffect(() => {
+    if (isConnected === true) showToastSuccess('Bạn đang online');
+    else if (isConnected === false) {
+      showToastError('Bạn đang offline');
+    }
+  }, [isConnected]);
 
   useEffect(() => {
     console.log('vao take data');
