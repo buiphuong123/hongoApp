@@ -22,12 +22,14 @@ import DrawerTab from './DrawerTab';
 import { navigationRef } from './NavigationService';
 import { useSelector, useDispatch } from 'react-redux';
 import { loginUserSuccess } from '../redux/actions/index';
+import {useIsConnected} from 'react-native-offline';
 import messaging from '@react-native-firebase/messaging';
 import axios from 'axios';
 import { getListUser } from "./../redux/actions/index";
 import { getListWordSuccess } from "../redux/actions/word.action";
 import RNFS from 'react-native-fs';
 import { showLoading, hideLoading } from "./../redux/actions/index";
+import { showToastError, showToastSuccess } from "../helpers/toastHelper";
 const Home = (props) => {
     // const readFile = async (path) => {
     //     const exists = await RNFS.exists(path);
@@ -45,6 +47,7 @@ const Home = (props) => {
 
     //     // setFileData(response); //set the value of response to the fileData Hook.
     // };
+    const isConnected = useIsConnected();
 
     const [isDarkTheme, setIsDarkTheme] = React.useState(false);
     const dispatch = useDispatch();
@@ -71,6 +74,13 @@ const Home = (props) => {
     // const takeNotifi = () => {
 
     // } 
+
+    useEffect(() => {
+        if (isConnected === true) showToastSuccess('Bạn đang online');
+        else if (isConnected === false) {
+          showToastError('Bạn đang offline');
+        }
+      }, [isConnected]);
 
     useEffect(() => {
         console.log('vao take data');

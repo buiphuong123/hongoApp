@@ -13,6 +13,7 @@ import GlobalLoading from './src/GlobalLoading';
 import NewPassword from './src/screens/user/NewPassword';
 import FlatListitem from './src/screens/Flatlistitem';
 const sagaMiddleware = createSagaMiddleware();
+import {NetworkProvider} from 'react-native-offline';
 import HomeScreenDetail from './src/screens/tab/home/HomeScreenDetail';
 import HomeScreen from './src/screens/tab/home/HomeScreen';
 import ExplainScreen from './src/screens/tab/home/ExplainScreen';
@@ -187,6 +188,7 @@ const App = () => {
   // });
   return (
       <Provider store={store}>
+        <NetworkProvider>
         {/* <PracticeScreen /> */}
         {/* <GrammarTest /> */}
         <Home />
@@ -203,6 +205,7 @@ const App = () => {
         <Toast ref={(ref) => Toast.setRef(ref)} />
         <GlobalLoading />
         {/* <Fetchdata /> */}
+          </NetworkProvider>
       </Provider>
   );
 };
