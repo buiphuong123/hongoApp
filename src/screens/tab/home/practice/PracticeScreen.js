@@ -6,18 +6,24 @@ import { useTheme } from 'react-native-paper';
 import { element } from 'prop-types';
 import { ScrollView } from 'react-native-gesture-handler';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { getListCommentRequest } from '../../../../redux/actions/comment.action';
+
 const PracticeScreen = ({navigation, route}) => {
     const { colors } = useTheme();
-    const {dataqs} = route.params;
+    const {dataqs, lession} = route.params;
     // const [data, setData] = useState(dataqs);
     
     const [listques, setlistques] = useState([]);
+    const dispatch = useDispatch();
     useEffect(() => {
         // setlistques(dataqs);
         setlistques( dataqs.map((obj, i) => ({ ...obj, choose: undefined })));
     }, [dataqs, navigation]);
     const [checkTest, setCheckTest] = useState(false);
     const [count, setCount] = useState(0);
+    const users = useSelector(state => state.userReducer.user);
+
     const chooseAns = (question, choo) => {
         const objIndex = listques.findIndex(e => e._id === question._id);
         const objIndex1 = listques[objIndex].listAns.indexOf(choo);
@@ -52,7 +58,7 @@ const PracticeScreen = ({navigation, route}) => {
                     </TouchableOpacity>
                 </View>
                 <View style={{ justifyContent: 'center' }}>
-                    <Text style={{ textAlign: 'center', color: '#fff', fontSize: 18, marginLeft: 10 }}>Test 1</Text>
+                    <Text style={{ textAlign: 'center', color: '#fff', fontSize: 18, marginLeft: 10 }}>Test {lession}</Text>
                 </View>
                 <View style={{ flex: 5, flexDirection: 'row', marginRight: 20, justifyContent: 'flex-end' }}>
                     {checkTest === false ?
@@ -70,7 +76,7 @@ const PracticeScreen = ({navigation, route}) => {
                 <View>
                     {checkTest === true ?
                         <View style={{ justifyContent: 'center' }}>
-                            <Text style={{ fontWeight: 'bold', fontSize: 18, textAlign: 'center', marginBottom: 10, color: colors.text }}>Banj đã trả lời đúng: {count}/{listques.length} câu hỏi</Text>
+                            <Text style={{ fontWeight: 'bold', fontSize: 18, textAlign: 'center', marginBottom: 10, color: colors.text }}>Bạn đã trả lời đúng: {count}/{listques.length} câu hỏi</Text>
                         </View>
                         : null}
                     {listques.map((element, key) => {
@@ -99,7 +105,7 @@ const PracticeScreen = ({navigation, route}) => {
                                                                     {
                                                                         element.data !== undefined  ?
                                                                     
-                                                                    <TouchableOpacity onPress={() => navigation.navigate("ExplainScreen", {word: element.data})}>
+                                                                    <TouchableOpacity onPress={() => {dispatch(getListCommentRequest(users._id,element.data._id ));navigation.navigate("ExplainScreen", {word: element.data})}}>
                                                                         <Text style={{textDecorationLine: 'underline', color: colors.question}}>giải thích chi tiết ngữ pháp</Text>
                                                                     </TouchableOpacity>
                                                                     : null}

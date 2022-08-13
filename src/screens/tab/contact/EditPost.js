@@ -9,6 +9,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { getListPostSuccess } from '../../../redux/actions/post.action';
+import { showToastError, showToastSuccess } from '../../../helpers/toastHelper';
 
 const EditPost = ({navigation, route }) => {
     const { colors } = useTheme();
@@ -18,11 +19,18 @@ const EditPost = ({navigation, route }) => {
     const [selectedChoose, setSelectedChoose] = useState(["Tất cả","Góc chia sẻ", "Học tiếng Nhật", "Du học Nhật Bản", "Việc làm tiếng Nhật", "Văn hóa Nhật Bản", "Tìm bạn học", "Khác"]);
     const [chooseSelected, setChooseSelected] = useState(selectedChoose.findIndex(e => e === item.theme));
     const richText = React.useRef();
+    const [check, setCheck] = useState(false);
     const [contentHTML, setContentHTML] = useState(item.content);
     const listPost = useSelector(state => state.postReducer.listPost);
     const [dataP, setDataP] = useState(listPost);
-    const [data, setData] = useState({ html: `` });
+    const [data, setData] = useState({ });
     useEffect(() => {
+        console.log('set lai data');
+        setData({});
+
+    }, []);
+    useEffect(() => {
+        setCheck(true);
         setTitleSearch(item.title);
         setChooseSelected(selectedChoose.findIndex(e => e === item.theme));
         console.log('cai can day nhe', data);
@@ -33,7 +41,7 @@ const EditPost = ({navigation, route }) => {
         setDataP(listPost);
     }, [listPost]);
     const onEditorInitialized = () => {
-        setData({"html": item.content.html});
+        // setData({"html": item.content.html});
         console.log('initalised', data);
     }
     // const [update, setUpdate] = useState(item.content);
@@ -44,6 +52,7 @@ const EditPost = ({navigation, route }) => {
 
     const editP = () => {
         console.log('vao eidt');
+        setCheck(false);
         var time = new Date();
         setData({ ...data });
         const objIndex = listPost.findIndex(e=> e._id === item._id);
@@ -71,6 +80,14 @@ const EditPost = ({navigation, route }) => {
         })
             .then((response) => {
                 console.log( response.data);
+                setData({"html": ""});
+                if(response.data.code ===1) {
+                    
+                    showToastSuccess("Chỉnh sửa bài viết thành công");
+                }
+                else {
+                    showToastError("Có lỗi xảy ra!! Vui lòng thử lại sau");
+                }
                 navigation.goBack();
             })
 
@@ -101,20 +118,22 @@ const EditPost = ({navigation, route }) => {
                     <ScrollView>
                         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1, minHeight: 200 }}>
                             <Text style={{color: colors.text}}>{contentHTML.html}</Text>
+                            {check &&
                             <RichEditor
                                 ref={richText}
                                 editorStyle ={{backgroundColor: colors.background, color:colors.text}}
                                 placeholder="Nhập nội dung câu hỏi...."
                                 androidHardwareAccelerationDisabled={true}
                                 initialContentHTML={contentHTML.html}
-                                initialFocus={true}
-                                editorInitializedCallback={() => onEditorInitialized()}
+                                initialFocus={false}
+                                disabled={true}
+                                // editorInitializedCallback={() => onEditorInitialized()}
                                 onChange={descriptionText => {
-                                    console.log(data);
                                     data.html = descriptionText;
                                     setData({ ...data });
                                 }}
                             />
+}
 
 
                         </KeyboardAvoidingView>

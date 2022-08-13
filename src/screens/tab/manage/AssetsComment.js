@@ -196,6 +196,7 @@ const AssetsComment = ({ navigation, route }) => {
     const acceptComment = (element) => {
         const list = [];
         var notitype = "word";
+        var iddd= "";
         if (element._id !== undefined) {
             // const objIndex = dataCommentWord.findIndex(e => e._id === element._id);
             // if (objIndex !== -1) {
@@ -211,6 +212,7 @@ const AssetsComment = ({ navigation, route }) => {
                     list.push(element._id);
                     dataCommentWord[objIndex].review = 1;
                     dataCommentWord[objIndex].checked = false;
+                    iddd = dataCommentWord[objIndex].word_id;
                     setDataCommentWord([...dataCommentWord]);
 
                 }
@@ -221,6 +223,7 @@ const AssetsComment = ({ navigation, route }) => {
                     list.push(element._id);
                     dataCommentGrammar[objIndex].review = 1;
                     dataCommentGrammar[objIndex].checked = false;
+                    iddd = dataCommentWord[objIndex].grammar_id;
                     setDataCommentGrammar([...dataCommentGrammar]);
 
                 }
@@ -302,7 +305,7 @@ const AssetsComment = ({ navigation, route }) => {
             "noti": "comment",
             "type": notitype,
             "user": users,
-            "id": element._id,
+            "id": iddd,
             "user_noti": element.user_id._id,
             "notifi_token": element.user_id.notifiToken
 

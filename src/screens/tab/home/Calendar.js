@@ -155,19 +155,7 @@ export default Calendar = ({ navigation }) => {
                         item.method === 1 ?
                           <Icon name={'notifications-outline'} size={20} style={{ color: 'black' }} />
                           :
-                          item.method === 2 ?
-                            <Entypo name={'mail'} size={20} style={{ color: 'blue' }} />
-                            :
-                            item.method === 3 ?
-                              <View style={{ flexDirection: 'row' }}>
-                                <TouchableOpacity style={{ marginLeft: 40 }}>
-                                  <MaterialIcons name={'phone-iphone'} size={20} />
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{ marginLeft: 10 }}>
-                                  <Entypo name={'mail'} size={20} />
-                                </TouchableOpacity>
-                              </View>
-                              : null
+                         null
 
                       }
 

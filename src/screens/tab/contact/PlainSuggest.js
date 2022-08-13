@@ -22,7 +22,7 @@ export default PlainSuggest = ({ navigation }) => {
     const [level, setLevel] = useState("N5");
     const [levelfulture, setLevelFulture] = useState("N5");
     const leveloptions = ["Bắt đầu", "N5", "N4", "N3", "N2"];
-    const [time, setTime] = useState(1);
+    const [time, setTime] = useState("1");
     const [listTime, setListTime] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
     const [type, setType] = useState("tháng");
     const users = useSelector(state => state.userReducer.user);
@@ -42,6 +42,13 @@ export default PlainSuggest = ({ navigation }) => {
     const iphoneNoti = useSelector(state => state.notifiReducer.iphoneNoti);
     const [scheduleee, setScheduleee] = useState([]);
     const [isend, setisEnd] = useState(false);
+    const [modelAlert, setModalAlert] = useState(false);
+    const [textAlert, setTextAlert] = useState("");
+    const [iconAlert, setIconAlert] = useState("");
+    const [modelAlertSuccess, setModalAlertSuccess] = useState(false);
+    const [modelAlertError, setModalAlertError] = useState(false);
+    const [textAlertError, setTextAlertError] = useState("");
+    const [modelAlertFail, setModalAlertFail] = useState(false);
     const showMode = (currentMode) => {
         setShow(true);
         setMode(currentMode);
@@ -109,80 +116,90 @@ export default PlainSuggest = ({ navigation }) => {
             .then((response) => {
                 console.log(response.data);
                 if (response.data.code === 0) {
-                    Alert.alert(
-                        "Thông báo",
-                        response.data.mess + "!",
-                        [
-                            {
-                                text: "Yes", onPress: () => {
-                                    console.log('yes press');
-                                }
-                            }
-                        ]
-                    )
+                    // setModalAlertSuccess(true);
+                    setModalAlertError(true);
+                    setTextAlertError(response.data.mess);
+                    // Alert.alert(
+                    //     "Thông báo",
+                    //     response.data.mess + "!",
+                    //     [
+                    //         {
+                    //             text: "Yes", onPress: () => {
+                    //                 console.log('yes press');
+                    //             }
+                    //         }
+                    //     ]
+                    // )
                 }
                 else if (response.data.code === 2) {
-                    Alert.alert(
-                        "Thông báo",
-                        response.data.mess + "!",
-                        [
-                            {
-                                text: "Yes", onPress: () => {
-                                    console.log('yes press');
-                                }
-                            },
-                            {
-                                text: "Xoá kế hoạch", onPress: () => {
-                                    axios.post('https://nameless-spire-67072.herokuapp.com/language/deletesuggestPlain', {
-                                        "user_id": users._id
-                                    }, {
-                                        headers: {
-                                            "Accept": "application/json",
-                                            "Content-Type": "application/json"
-                                        }
-                                    })
-                                        .then((response1) => {
-                                            console.log(response1.data);
-                                            if (response1.data.code === 1) {
-                                                showToastSuccess(response1.data.mess);
-                                            }
-                                            else {
-                                                showToastError(response1.data.err);
-                                            }
-                                            // dispatch(getListScheduleRequest(users._id));
-                                        })
-                                        .catch(function (error) {
-                                            throw error;
-                                        })
-                                }
-                            }
-                        ]
-                    )
+                    console.log('vao day');
+                    setTextAlertError(response.data.mess);
+                    setModalAlertFail(true);
+                    // Alert.alert(
+                    //     "Thông báo",
+                    //     response.data.mess + "!",
+                    //     [
+                    //         {
+                    //             text: "Yes", onPress: () => {
+                    //                 console.log('yes press');
+                    //             }
+                    //         },
+                    //         {
+                    //             text: "Xoá kế hoạch", onPress: () => {
+                    //                 axios.post('https://nameless-spire-67072.herokuapp.com/language/deletesuggestPlain', {
+                    //                     "user_id": users._id
+                    //                 }, {
+                    //                     headers: {
+                    //                         "Accept": "application/json",
+                    //                         "Content-Type": "application/json"
+                    //                     }
+                    //                 })
+                    //                     .then((response1) => {
+                    //                         console.log(response1.data);
+                    //                         if (response1.data.code === 1) {
+                    //                             showToastSuccess(response1.data.mess);
+                    //                         }
+                    //                         else {
+                    //                             showToastError(response1.data.err);
+                    //                         }
+                    //                         // dispatch(getListScheduleRequest(users._id));
+                    //                     })
+                    //                     .catch(function (error) {
+                    //                         throw error;
+                    //                     })
+                    //             }
+                    //         }
+                    //     ]
+                    // )
                 }
                 else {
-                    Alert.alert(
-                        "Thông báo",
-                        response.data.mess,
-                        [
-                            {
-                                text: "No",
-                                onPress: () => {
-                                    console.log('no');
-                                },
-                                style: "cancel"
+                    setModalAlertSuccess(true);
+                    console.log(response.data.mess);
+                    setScheduleee(response.data.result);
+                    setTextAlert(response.data.mess);
+                    // Alert.alert(
+                    //     "Thông báo",
+                    //     response.data.mess,
+                    //     [
+                    //         {
+                    //             text: "No",
+                    //             onPress: () => {
+                    //                 console.log('no');
+                    //             },
+                    //             style: "cancel"
 
-                            },
-                            {
-                                text: "Yes", onPress: () => {
-                                    console.log('bat dau laap ke hoach');
-                                    setScheduleee(response.data.result);
-                                    setisVisible(true);
+                    //         },
+                    //         {
+                    //             text: "Yes", onPress: () => {
+                    //                 console.log('bat dau laap ke hoach');
+                    //                 setScheduleee(response.data.result);
+                    //                 setisVisible(true);
 
-                                }
-                            },
+                    //             }
+                    //         },
 
-                        ]
-                    )
+                    //     ]
+                    // )
                 }
             })
             .catch(function (error) {
@@ -255,10 +272,35 @@ export default PlainSuggest = ({ navigation }) => {
                 throw error;
             })
     }
+    const deleteSchedule = () => {
+        setModalAlertFail(false);
+        axios.post('https://nameless-spire-67072.herokuapp.com/language/deletesuggestPlain', {
+            "user_id": users._id
+        }, {
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        })
+            .then((response1) => {
+                // console.log(response1.data);
+                // setTextAlertError(response.data.mess );
+                if (response1.data.code === 1) {
+                    showToastSuccess(response1.data.mess);
+                }
+                else {
+                    showToastError(response1.data.err);
+                }
+                // dispatch(getListScheduleRequest(users._id));
+            })
+            .catch(function (error) {
+                throw error;
+            })
+    }
     return (
         <View style={{ flex: 1 }}>
             <CustomHeader title={"gợi ý kế hoạch học"} navigation={navigation} />
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, }}>
                 <View style={{ flexDirection: 'row', padding: 10 }}>
                     <Text style={[styles.text, { color: colors.text }]}>Trình độ hiện tại</Text>
                     <SelectDropdown
@@ -295,8 +337,8 @@ export default PlainSuggest = ({ navigation }) => {
                         }}
                         dropdownStyle={{ backgroundColor: colors.dropdown }}
                         defaultValue={time}
-                        buttonStyle={{ width: '20%', backgroundColor: colors.background, }}
-                        buttonTextStyle={{ width: '20%', color: colors.text, backgroundColor: colors.dropdown, borderWidth: 1, borderColor: 'gray', marginTop: 10, padding: 10 }}
+                        buttonStyle={{ width: '30%', backgroundColor: colors.background, }}
+                        buttonTextStyle={{ width: '30%', color: colors.text, backgroundColor: colors.dropdown, borderWidth: 1, borderColor: 'gray', marginTop: 10, padding: 10 }}
                     />
 
                     <SelectDropdown
@@ -399,11 +441,152 @@ export default PlainSuggest = ({ navigation }) => {
 
                 )
             }
+            {/* <View style={styles.container}> */}
+            {/* <Modal
+                visible={modelAlertFail}
+            >
+                 <View style={styles.containerModal}>
+                    <View style={{ borderRadius: 4, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', width: '90%', padding: 20, alignSelf: 'center' }}>
+                     
+                        <MaterialIcons name={'sms-failed'} size={40} style={{ color: 'orange' }} />
+                    </View>
+                    <View style={{ marginTop: 10 }}>
+                        <Text>{textAlertError}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 20 }}>
+                        <View style={{ flex: 1 }} />
+
+                        <TouchableOpacity
+                            onPress={() => setModalAlertFail(false)}
+                            style={{}}>
+                            <Text style={{}}>OK</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={{ marginLeft: 20 }}
+                            onPress={() => deleteSchedule()}
+                        // style={{ marginLeft: 20, marginRight: -40, justifyContent: 'flex-end' }}
+                        >
+                            <Text>Xóa kế hoạch</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                </View>
+            </Modal> */}
+            {/* </View> */}
+            {/* <View style={styles.container}> */}
+            <Modal
+                isVisible={modelAlertSuccess}
+            >
+                <View style={styles.containerModal}>
+                    <View style={{ borderRadius: 4, backgroundColor: colors.background, justifyContent: 'center', alignItems: 'center', width: '90%', padding: 20, alignSelf: 'center' }}>
+                        <View>
+                            <Icons name={'checkcircle'} size={40} style={{ color: 'green' }} />
+                        </View>
+                        <View style={{ marginTop: 10 }}>
+                            <Text style={[styles.textAlert, {color: colors.text}]}>{textAlert} </Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 20 }}>
+                            <View style={{ flex: 1 }} />
+
+                            <TouchableOpacity
+                                onPress={() => setModalAlertSuccess(false)}
+                                style={{}}>
+                                <Text style={{}}>No</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{ marginLeft: 20 }}
+                                onPress={() => {
+                                    setModalAlertSuccess(false);
+                                    setisVisible(true);
+                                }}
+                            // style={{ marginLeft: 20, marginRight: -40, justifyContent: 'flex-end' }}
+                            >
+                                <Text>Yes</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+
+            <Modal
+                isVisible={modelAlertFail}
+            >
+                <View style={styles.containerModal}>
+                    <View style={{ borderRadius: 4, backgroundColor:colors.background, justifyContent: 'center', alignItems: 'center', width: '90%', padding: 20, alignSelf: 'center' }}>
+                        <View>
+                            <MaterialIcons name={'sms-failed'} size={40} style={{ color: 'orange' }} />
+                        </View>
+                        <View style={{ marginTop: 10 }}>
+                            <Text style={[styles.textAlert, {color: colors.text}]}>{textAlertError} </Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 20 }}>
+                            <View style={{ flex: 1 }} />
+
+                            <TouchableOpacity
+                                onPress={() => setModalAlertFail(false)}
+                                style={{}}>
+                                <Text style={{}}>No</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{ marginLeft: 20 }}
+                                onPress={() => deleteSchedule()}
+                            // style={{ marginLeft: 20, marginRight: -40, justifyContent: 'flex-end' }}
+                            >
+                                <Text>Xóa kế hoạch</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                isVisible={modelAlertError}
+            >
+                <View style={styles.containerModal}>
+                    <View style={{ borderRadius: 4, backgroundColor: colors.background, justifyContent: 'center', alignItems: 'center', width: '90%', padding: 20, alignSelf: 'center' }}>
+                        <View>
+                            <MaterialIcons name={'error'} size={40} style={{ color: 'red' }} />
+                        </View>
+                        <View style={{ marginTop: 10 }}>
+                            <Text style={[styles.textAlert, {color: colors.text}]}>{textAlertError} </Text>
+                        </View>
+                        {/* <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 20 }}>
+                            <View style={{ flex: 1 }} /> */}
+                        {/* <View style={{ flex: 1 }} /> */}
+                        {/* <TouchableOpacity
+                                onPress={() => setModalAlertError(false)}
+                                style={{ }}>
+                                <Text style={{}}>No</Text>
+                            </TouchableOpacity> */}
+                        <TouchableOpacity
+                            style={{ marginTop: 20, backgroundColor: '#00b300', padding: 10, paddingLeft: 10, paddingRight: 10 }}
+                            onPress={() => {
+                                setModalAlertError(false);
+                            }}
+                        // style={{ marginLeft: 20, marginRight: -40, justifyContent: 'flex-end' }}
+                        >
+                            <Text style={{ color: '#fff' }}>OK</Text>
+                        </TouchableOpacity>
+                        {/* </View> */}
+                    </View>
+                </View>
+            </Modal>
+            {/* </View> */}
         </View>
     )
 }
 
 const styles = StyleSheet.create({
+    containerModal: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    textAlert: {
+        fontSize: 16,
+        textAlign: 'justify',
+        lineHeight: 23,
+    },
     text: {
         width: '40%', alignSelf: 'center', fontWeight: 'bold', fontSize: 18
     },

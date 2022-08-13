@@ -172,7 +172,7 @@ const TestWord = ({ navigation, route }) => {
         }
         // console.log('DATA TEST LA ', dataTest);
         if(dataTest.length === 0) {
-            showToastError("Bài bạn nhập vào dường như không hợp lệ! không có dữ liệu câu hỏi!!!");
+            showToastError("Không có dữ liệu với lựa chọn của bạn!!!");
             return ;
         }
         if (isjoinQuestion === 'checked') {

@@ -102,7 +102,7 @@ export default ListKanjiScreen = ({ navigation, lession, datass }) => {
         setisVisibleAction(false);
         Alert.alert(
             "Alert",
-            "Are you sure delete " + currentWord.kanji + " ?",
+            "Bạn có chắc chắn muốn xóa " + currentWord.kanji + " ?",
             [
                 {
                     text: "Cancel",

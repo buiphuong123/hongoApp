@@ -121,7 +121,7 @@ export default ListWord = ({ navigation, lession, datass }) => {
         setisVisibleAction(false);
         Alert.alert(
             "Alert",
-            "Are you sure delete " +  currentWord.word + " ?",
+            "Bạn có chắc chắn muốn xóa " +  currentWord.word + " ?",
             [
                 {
                     text: "Cancel",

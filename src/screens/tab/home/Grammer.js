@@ -78,7 +78,7 @@ export default Grammer = ({ navigation, route }) => {
         setisVisibleAction(false);
         Alert.alert(
             "Alert",
-            "Are you sure delete " + currentWord.grammar + " ?",
+            "Bạn có chắc chắn muốn xóa " + currentWord.grammar + " ?",
             [
                 {
                     text: "Cancel",

@@ -16,9 +16,13 @@ import { RadioButton } from 'react-native-paper';
 import { getListScheduleRequest, getListScheduleSuccess } from '../../../redux/actions/schedule.action';
 import { remoteNoti10before, remoteNoti30before, remoteNoti1hourbefore, remoteNoti1daybefore, remoteNotimail, remoteNotiiphone } from '../../../redux/actions/notifi.action';
 const { height } = Dimensions.get('window');
+import { useTheme } from 'react-native-paper';
+import { showToastError, showToastSuccess } from '../../../helpers/toastHelper';
 
 export default EditCalendar = ({ navigation, route }) => {
     const dispatch = useDispatch();
+    const { colors } = useTheme();
+
     const { calen } = route.params;
     const noti10mintuesbefore = useSelector(state => state.notifiReducer.noti10mintuesbefore);
     const noti30mintuesbefore = useSelector(state => state.notifiReducer.noti30mintuesbefore);
@@ -38,6 +42,9 @@ export default EditCalendar = ({ navigation, route }) => {
     const [note, setNote] = useState(calen.note);
     const scheduleList = useSelector(state => state.scheduleReducer.scheduleList);
     const [items, setItems] = useState(scheduleList);
+    const [typekkkk, setTypekkkk] = useState(false);
+    const [value, setValue] = useState("10 phút trước");
+
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
@@ -74,7 +81,13 @@ export default EditCalendar = ({ navigation, route }) => {
             dispatch(remoteNoti1hourbefore('unchecked'));
             dispatch(remoteNoti1daybefore('unchecked'));
         }
-    }, []);
+        if(calen.typetime ===1) {
+           setTypekkkk(true);
+        }
+        else {
+            setTypekkkk(false);
+        }
+    }, [calen]);
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
         setShow(false);
@@ -90,6 +103,7 @@ export default EditCalendar = ({ navigation, route }) => {
     }
 
     const toggleSwitch10minutes = () => {
+        setValue("10 phút trước");
         if (noti10mintuesbefore === 'unchecked') {
             dispatch(remoteNoti10before('checked'));
             dispatch(remoteNoti30before('unchecked'));
@@ -98,6 +112,7 @@ export default EditCalendar = ({ navigation, route }) => {
         }
     }
     const toggleSwitch30minutes = () => {
+        setValue("30 phút trước")
         if (noti30mintuesbefore === 'unchecked') {
             dispatch(remoteNoti10before('unchecked'));
             dispatch(remoteNoti30before('checked'));
@@ -106,6 +121,7 @@ export default EditCalendar = ({ navigation, route }) => {
         }
     }
     const toggleSwitch1hour = () => {
+        setValue("1 giờ trước");
         if (noti1hourbefore === 'unchecked') {
             dispatch(remoteNoti10before('unchecked'));
             dispatch(remoteNoti30before('unchecked'));
@@ -122,11 +138,11 @@ export default EditCalendar = ({ navigation, route }) => {
         }
     }
     const setIphone = () => {
-        if (iphoneNoti === false ) {
-            dispatch(remoteNotiiphone(true));
+        if (typekkkk === false ) {
+            setTypekkkk(true);
         }
         else {
-            dispatch(remoteNotiiphone(false));
+            setTypekkkk(false);
         }
     }
 
@@ -168,14 +184,12 @@ export default EditCalendar = ({ navigation, route }) => {
         else {
             timenoti = 4;
         }
-        if (mailNoti && iphoneNoti) {
-            method = 3;
-        }
-        else if (mailNoti && iphoneNoti === false) {
+        if (typekkkk === true) {
             method = 1;
         }
+        
         else {
-            method = 2;
+            method = 0;
         }
 
         var index = 1;
@@ -207,7 +221,7 @@ export default EditCalendar = ({ navigation, route }) => {
 
         })
 
-        axios.post('http://192.168.1.722:3002/language/editschedule', {
+        axios.post('https://nameless-spire-67072.herokuapp.com/language/editschedule', {
             "id": calen._id,
             "nameSchedule": namesche,
             "note": note,
@@ -225,6 +239,13 @@ export default EditCalendar = ({ navigation, route }) => {
         })
             .then((response) => {
                 console.log(response.data);
+                if(response.data.code ===1) {
+                    showToastSuccess("Thay đổi lịch trình thành công");
+                }
+                else 
+                {
+                    showToastError("Có một số lỗi xảy ra!!!")
+                }
             })
             .catch(function (error) {
                 throw error;
@@ -252,7 +273,7 @@ export default EditCalendar = ({ navigation, route }) => {
         <View style={{ flex: 1 }}>
             <Card>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <AntDesign name={'close'} size={25} style={{ color: 'black', paddingTop: 20, paddingLeft: 20 }} />
+                    <AntDesign name={'close'} size={25} style={{ color: colors.text, paddingTop: 20, paddingLeft: 20 }} />
                 </TouchableOpacity>
                 <Card.Content>
                     <View
@@ -262,8 +283,10 @@ export default EditCalendar = ({ navigation, route }) => {
                             height: height / 10,
                         }}>
                         <TextInput
-                            style={{ fontSize: 25, padding: 15 }}
+                            style={{ fontSize: 18, padding: 15, color: colors.text }}
                             placeholder="input schedule"
+                            placeholderTextColor={colors.text_of_input}
+
                             value={namesche}
                             onChangeText={text => setNamesche(text)}
                         />
@@ -278,7 +301,7 @@ export default EditCalendar = ({ navigation, route }) => {
                                 <AntDesign name={'calendar'} size={20} style={{ color: 'blue' }} />
                             </TouchableOpacity>
 
-                            <Text style={{ marginLeft: 10 }}>{calen.date}</Text>
+                            <Text style={{ marginLeft: 10, color: colors.text }}>{calen.date}</Text>
                         </View>
 
 
@@ -290,9 +313,9 @@ export default EditCalendar = ({ navigation, route }) => {
                             <Icon name={'time-outline'} size={20} style={{ color: 'blue' }} />
                         </TouchableOpacity>
                         {dateCalen === '' ?
-                            <Text style={{ marginLeft: 10 }}>{calen.time}</Text>
+                            <Text style={{ marginLeft: 10, color: colors.text }}>{calen.time}</Text>
                             :
-                            <Text style={{ marginLeft: 10 }}>{fixDigit(dateCalen.getHours()) + ':' + fixDigit(dateCalen.getMinutes())}</Text>
+                            <Text style={{ marginLeft: 10, color: colors.text}}>{fixDigit(dateCalen.getHours()) + ':' + fixDigit(dateCalen.getMinutes())}</Text>
                         }
                         {/* <Text style={{ marginLeft: 10 }}>{fixDigit(dateCalen.getHours()) + ':' + fixDigit(dateCalen.getMinutes())}</Text> */}
                     </View>
@@ -304,7 +327,10 @@ export default EditCalendar = ({ navigation, route }) => {
                             <TouchableOpacity onPress={() => setModalVisible(true)}>
                                 <Icon name={'notifications-outline'} size={20} style={{ color: '#808080' }} />
                             </TouchableOpacity>
-                            <Text style={{ marginLeft: 10, color: '#808080' }}>Set notification</Text>
+                            {
+
+                            }
+                            <Text style={{ marginLeft: 10, color: '#808080' }}>{value}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -321,7 +347,7 @@ export default EditCalendar = ({ navigation, route }) => {
                             </View>
                             <View style={{ flexDirection: 'row' }}>
                                 <TouchableOpacity style={{ marginLeft: 40 }} onPress={() => setIphone()}>
-                                    <MaterialIcons name={'phone-iphone'} size={20} style={{ color: calen.method === 1? 'blue' : '#bfbfbf' }} />
+                                    <MaterialIcons name={'phone-iphone'} size={20} style={{ color: typekkkk? 'blue' : '#bfbfbf' }} />
                                 </TouchableOpacity>
                                 {/* <TouchableOpacity style={{ marginLeft: 10 }} onPress={() => setEmail()}>
                                     <Entypo name={'mail'} size={20} style={{ color: calen.method === 1 || calen.method === 3 ? 'blue' : '#bfbfbf' }} />
@@ -342,10 +368,11 @@ export default EditCalendar = ({ navigation, route }) => {
                             </View>
                             <View style={{ marginTop: 10 }}>
                                 <TextInput
-                                    style={{ padding: 20, paddingTop: 10 }}
+                                    style={{ padding: 20, paddingTop: 10, color: colors.text }}
                                     multiline={true}
                                     placeholder="Note...."
                                     value={note}
+                                    placeholderTextColor={colors.text_of_input}
                                     onChangeText={text => setNote(text)}
                                 />
                             </View>
@@ -360,13 +387,13 @@ export default EditCalendar = ({ navigation, route }) => {
                     <TouchableOpacity
                         onPress={() => editSchedule()}
                         style={[styles.signIn, {
-                            borderColor: '#009387',
+                            borderColor: colors.header,
                             borderWidth: 1,
                             marginTop: 15
                         }]}
                     >
                         <Text style={[styles.textSign, {
-                            color: '#009387'
+                            color: colors.header
                         }]}>Edit Schedule</Text>
                     </TouchableOpacity>
                 </View>
@@ -395,36 +422,45 @@ export default EditCalendar = ({ navigation, route }) => {
                     isVisible={isModalVisible}
                 >
                     <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <Text style={styles.modalText}>Notification</Text>
+                        <View style={[styles.modalView, {backgroundColor: colors.background}]}>
+                            <Text style={[styles.modalText, {color: colors.text}]}>Notification</Text>
                             <View style={{ marginBottom: 10 }}>
                                 <View style={{ flexDirection: 'row' }}>
                                     <RadioButton
+                                     uncheckedColor={colors.text}
+                                     color={colors.header}
+                                     tintColors={{ true: colors.header, false: colors.text }}
                                         status={noti10mintuesbefore}
                                         onPress={() => toggleSwitch10minutes()}
                                     />
-                                    <Text style={styles.centerStyle}>10 minutes before</Text>
+                                    <Text style={[styles.centerStyle, { color: colors.text }]}>10 phút trước</Text>
 
                                 </View>
                                 <View style={{ flexDirection: 'row' }}>
                                     <RadioButton
+                                     uncheckedColor={colors.text}
+                                     color={colors.header}
+                                     tintColors={{ true: colors.header, false: colors.text }}
                                         status={noti30mintuesbefore}
                                         onPress={() => toggleSwitch30minutes()}
 
                                     />
-                                    <Text style={styles.centerStyle}>30 minutes before</Text>
+                                    <Text style={[styles.centerStyle, { color: colors.text }]}>30 phút trước</Text>
 
                                 </View>
                                 <View style={{ flexDirection: 'row' }}>
                                     <RadioButton
+                                     uncheckedColor={colors.text}
+                                     color={colors.header}
+                                     tintColors={{ true: colors.header, false: colors.text }}
                                         status={noti1hourbefore}
                                         onPress={() => toggleSwitch1hour()}
 
                                     />
-                                    <Text style={styles.centerStyle}>1 hours before</Text>
+                                    <Text style={[styles.centerStyle, { color: colors.text }]}>1 giờ trước</Text>
 
                                 </View>
-                                <View style={{ flexDirection: 'row' }}>
+                                {/* <View style={{ flexDirection: 'row' }}>
                                     <RadioButton
                                         status={noti1daybefore}
                                         onPress={() => toggleSwitch1day()}
@@ -432,14 +468,14 @@ export default EditCalendar = ({ navigation, route }) => {
                                     />
                                     <Text style={styles.centerStyle}>1 days before</Text>
 
-                                </View>
+                                </View> */}
                             </View>
                             <TouchableOpacity
-                                style={[styles.button, styles.buttonClose]}
+                                style={[styles.button, styles.buttonClose, {backgroundColor: colors.header}]}
                                 // onPress={() => setModalVisible(!modalVisible)}
                                 onPress={toggleModal}
                             >
-                                <Text style={styles.textStyle}>Hide Modal</Text>
+                                <Text style={[styles.textStyle, { color: colors.text }]}>Đóng</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

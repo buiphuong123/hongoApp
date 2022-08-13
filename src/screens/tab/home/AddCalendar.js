@@ -86,6 +86,7 @@ export default AddCalendar = ({ navigation, route }) => {
     }
 
     const sendSchedule = () => {
+        console.log('vao day roi ');
         const datestart = fixDigit(dateCalen.getFullYear()) + '-' + fixDigit(dateCalen.getMonth() + 1) + '-' + fixDigit(dateCalen.getDate());
         const dateend = fixDigit(endDate.getFullYear()) + '-' + fixDigit(endDate.getMonth() + 1) + '-' + fixDigit(endDate.getDate());
         var d1 = datestart.split("-");
@@ -94,9 +95,11 @@ export default AddCalendar = ({ navigation, route }) => {
         const to = new Date(d2[0], parseInt(d2[1]) - 1, d2[2]);
         if(namesche === "") {
             showToastError("Vui lòng không để trống tên!!");
+            return; 
         }
         if(from>=to){
-            showToastError("Vui lòng nhập vào ngày hợp lệ!!")
+            showToastError("Vui lòng nhập vào ngày hợp lệ!!");
+            return;
         }
         var timenoti = 1;
         var method = 0;
@@ -119,11 +122,13 @@ export default AddCalendar = ({ navigation, route }) => {
             fixDigit(endDate.getFullYear()) + '-' + fixDigit(endDate.getMonth() + 1) + '-' + fixDigit(endDate.getDate()),
             dateCalen.getHours() + ':' + fixDigit(dateCalen.getMinutes()), timenoti, method, users._id
         );
+        console.log('start ', datestart);
+        console.log('end ', dateend);
         axios.post('https://nameless-spire-67072.herokuapp.com/language/remind', {
             "nameSchedule": namesche,
             "note": note,
-            "datestart": datestart,
-            "dateend": dateend,
+            "datestart": fixDigit(dateCalen.getFullYear()) + '-' + fixDigit(dateCalen.getMonth() + 1) + '-' + fixDigit(dateCalen.getDate()),
+            "dateend": fixDigit(endDate.getFullYear()) + '-' + fixDigit(endDate.getMonth() + 1) + '-' + fixDigit(endDate.getDate()),
             "time": dateCalen.getHours() + ':' + fixDigit(dateCalen.getMinutes()),
             // "time": dateCalen,
             "timenoti": timenoti,
@@ -148,7 +153,7 @@ export default AddCalendar = ({ navigation, route }) => {
                 throw error;
             })
         dispatch(getListScheduleRequest(users._id));
-        axios.post('https://nameless-spire-67072.herokuapp.com/language/runNotifi', {
+        axios.post('https://192.168.1.7:3002/language/runNotifi', {
             "user_id": users._id
         }, {
             headers: {
@@ -362,7 +367,7 @@ export default AddCalendar = ({ navigation, route }) => {
                     >
                         <Text style={[styles.textSign, {
                             color: colors.header
-                        }]}>create Schedule</Text>
+                        }]}>Tạo lịch trình</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>

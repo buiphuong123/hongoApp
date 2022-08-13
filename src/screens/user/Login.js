@@ -23,6 +23,7 @@ import { loginRequest, setIsEnd } from '../../redux/actions/index';
 import { useSelector, useDispatch } from 'react-redux';
 // import firebase from '@react-native-firebase/app';
 import messaging from '@react-native-firebase/messaging';
+import { showToastError } from '../../helpers/toastHelper';
 
 const Login = (props) => {
     const [data, setData] = React.useState({
@@ -33,7 +34,7 @@ const Login = (props) => {
         isValidUser: true,
         isValidPassword: true,
     });
-    const [datauser, setDatauser] = useState({ username: data.username, password: data.password });
+    const [datauser, setDatauser] = useState({ username: data.username, password: data.password});
     const { colors } = useTheme();
     const [notifiToken, setNotifiToken] = useState("");
     const [kaka, setKaka] = useState('');
@@ -146,8 +147,11 @@ const Login = (props) => {
     }
 
     const doLogin = async () => {
-        console.log('vao login');
-        const token = await messaging().getToken()
+        if(data.username=== ""|| data.password=== "") {
+            showToastError("Vui lòng nhập đầy đủ thông tin!!!");
+            return;
+        }
+        const token = await messaging().getToken();
         console.log('kaka nen akak',token);
         console.log(data.username, data.password, token);
         loginRequestUser(data.username, data.password, token);

@@ -122,8 +122,9 @@ const NotificationStack = ({ navigation }) => {
 
         }
         // navigation.navigate("ExplainScreen", {word: item.data});
-        console.log(item.typeNoti);
+        
         if(item.typeNoti === 'word') {
+            console.log(item);
                 dispatch(getListWordCommentRequest(item.dataWord._id, users._id));
             navigation.navigate("WordScreenDetail", {navigation: navigation, vocabularys: item.dataWord });
             
@@ -157,7 +158,8 @@ const NotificationStack = ({ navigation }) => {
 
         }
         else if(item.typeNoti === 'grammar'){
-            dispatch(getListCommenStRequest(item.dataGrammar._id, users._id));
+            console.log(item.dataGrammar);
+            dispatch(getListCommentRequest(item.dataGrammar._id, users._id));
             navigation.navigate("ExplainScreen", { word: item.dataGrammar });
         }
         else if(item.typeNoti === 'schedule'){

@@ -40,7 +40,7 @@ function* loginUs({ payload, props }) {
     }
 }
 
-function *registerUs({ payload }) {
+function *registerUs({ payload, props }) {
     const { username, email, password } = payload;
     yield put(showLoading());
     const resp = yield call(register, {
@@ -51,6 +51,7 @@ function *registerUs({ payload }) {
     const { data } = resp;
     if (data.code == 1) {
         yield put(registerUserSuccess(data.success));
+        props.navigation.navigate('SignUp');
     }
     else {
         yield put(registerUserFail(data.error));

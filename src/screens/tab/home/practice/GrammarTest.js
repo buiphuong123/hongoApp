@@ -87,21 +87,21 @@ const GrammarTest = ({navigation, route}) => {
     const testQuestion = (number) => {
         if(chooseTab === 5) {
             const ds = data.filter(e => e.level ===chooseTab&&e.lession === number);
-            navigation.navigate("PracticeScreen", {navigation: navigation,dataqs: ds});
+            navigation.navigate("PracticeScreen", {navigation: navigation,dataqs: ds, lession: number});
         }
         else if(chooseTab=== 4) {
             const ds = data.filter(e => e.level ===chooseTab&&e.lession === number);
-            navigation.navigate("PracticeScreen", {navigation: navigation,dataqs: ds});
+            navigation.navigate("PracticeScreen", {navigation: navigation,dataqs: ds, lession: number});
         
         }
         else if(chooseTab=== 3) {
             const ds = data.filter(e => e.level ===chooseTab&&e.lession === number);
-            navigation.navigate("PracticeScreen", {navigation: navigation,dataqs: ds});
+            navigation.navigate("PracticeScreen", {navigation: navigation,dataqs: ds, lession: number});
         
         }
         else {
             const ds = data.filter(e => e.level ===chooseTab&&e.lession === number);
-            navigation.navigate("PracticeScreen", {navigation: navigation,dataqs: ds});
+            navigation.navigate("PracticeScreen", {navigation: navigation,dataqs: ds, lession: number});
         }
     }
     return (

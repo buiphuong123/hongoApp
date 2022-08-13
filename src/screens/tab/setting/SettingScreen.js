@@ -105,7 +105,7 @@ const SettingScreen = ({ navigation }) => {
                     <TouchableOpacity
                     onPress={() => navigation.navigate("PlainSuggest", {navigation: navigation})}
                     >
-                        <MaterialCommunityIcons name={'google-translate'} size={35} style={{ color: '#a6a6a6', }} />
+                        <Icons name={'settings-system-daydream'} size={35} style={{ color: '#a6a6a6', }} />
                     </TouchableOpacity>
                     <Text style={{color: colors.text}}>Gợi ý kế hoạch học tập</Text>
                 </View>

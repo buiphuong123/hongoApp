@@ -58,7 +58,25 @@ const ContactStack = ({ navigation }) => {
     const [searching, setSearching] = useState(false);
     const [filtered, setFiltered] = useState([]);
     const [loading, setLoading] = useState(false);
+    
+    const sortkaka = (data) => {
+        data.sort(
+            (a, b) => {
+                var dateA = new Date(a.time);
+                var dateB = new Date(b.time);
+                return dateA.getHours() - dateB.getHours() || dateA.getMinutes() - dateB.getMinutes() || dateA - dateB;
+            }
+        );
+        console.log('ket qua sau khi sap xep la ', data);
+    }
     useEffect(() => {
+        listPost.sort(
+            (a, b) => {
+                var dateA = new Date(a.time);
+                var dateB = new Date(b.time);
+                return dateB.getHours() - dateA.getHours() && dateB.getMinutes() - dateA.getMinutes() && dateB - dateA;
+            }
+        );
         setDataPost(listPost.filter(e => e.review === 1));
         console.log('vao useeffect');
     }, [listPost]);
@@ -72,7 +90,13 @@ const ContactStack = ({ navigation }) => {
         const unsubscribe = navigation.addListener('focus', () => {
             setisVisibleAction(false);
             dispatch(getPostRequest(users._id));
-
+            listPost.sort(
+                (a, b) => {
+                    var dateA = new Date(a.time);
+                    var dateB = new Date(b.time);
+                    return dateB.getHours() - dateA.getHours() && dateB.getMinutes() - dateA.getMinutes() && dateB - dateA;
+                }
+            );
             setDataPost(listPost.filter(e => e.review === 1));
             //Put your Data loading function here instead of my loadData()
         });
@@ -178,7 +202,7 @@ const ContactStack = ({ navigation }) => {
         setData({ ...data });
         var requ = 2;
 
-        if (isManage === true) {
+        if (isManage === false) {
             requ = 1;
         }
         console.log('co duyetj khong nao', isManage);
@@ -332,7 +356,7 @@ const ContactStack = ({ navigation }) => {
             <View key={index} style={{ padding: 10, backgroundColor: item.review === 2 ? 'gray' : colors.background }}>
                 {
                     item.review === 2 ?
-                        <Text style={{ paddingLeft: 10, paddingTop: 5, color: colors.text, paddingBottom: 10 }}>Bài viets của bạn đã được gửi đến quản trị viên chờ xác nhận</Text>
+                        <Text style={{ paddingLeft: 10, paddingTop: 5, color: colors.text, paddingBottom: 10 }}>Bài viết của bạn đã được gửi đến quản trị viên chờ xác nhận</Text>
                         : null
                 }
                 <Card>

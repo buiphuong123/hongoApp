@@ -193,8 +193,8 @@ const VocabularyScreen = ({ navigation }) => {
 
     const deleteVocuShare = (element) => {
         Alert.alert(
-            "Delete",
-            "Want to delete" + element.name + " khỏi bộ từ được chia sẻ ?",
+            "Thông báo",
+            "Bạn có chắc chắn muốn xóa " + element.name + " khỏi bộ từ được chia sẻ ?",
             [
                 {
                     text: "Cancel",
@@ -231,8 +231,8 @@ const VocabularyScreen = ({ navigation }) => {
     const deleteVocu = (element) => {
         console.log('vao dele');
         Alert.alert(
-            "Delete",
-            "Want to delete" + element.name + "?",
+            "Thông báo",
+            "Bạn có chắc chắn muốn xóa " + element.name + "?",
             [
                 {
                     text: "Cancel",
@@ -554,11 +554,11 @@ const VocabularyScreen = ({ navigation }) => {
                     backdropTransitionOutTiming={1000}
                     deviceWidth={WIDTH}
                 >
-                    <View style={[styles.modalContent, { marginTop: 50, minHeight: 170 }]}>
+                    <View style={[styles.modalContent, { marginTop: 50, minHeight: 170, backgroundColor: colors.background }]}>
                         <View style={{ padding: 15 }}>
-                            <Text style={{ fontWeight: 'bold', fontSize: 20 }}>Tạo nhóm từ</Text>
+                            <Text style={{ fontWeight: 'bold', fontSize: 20, color: colors.text }}>Tạo nhóm từ</Text>
                             <TextInput
-                                style={{ borderBottomWidth: 1, borderBottomColor: '#cccccc', alignItems: 'center', justifyContent: 'center' }}
+                                style={{ color: colors.text, borderBottomWidth: 1, borderBottomColor: '#cccccc', alignItems: 'center', justifyContent: 'center' }}
                                 placeholder="Nhập nhóm từ cần lưu"
                                 placeholderTextColor={colors.text_of_input}
                                 value={name}
@@ -592,11 +592,11 @@ const VocabularyScreen = ({ navigation }) => {
                     backdropTransitionOutTiming={1000}
                     deviceWidth={WIDTH}
                 >
-                    <View style={[styles.modalContent, { marginTop: 50, minHeight: 170 }]}>
+                    <View style={[styles.modalContent, { marginTop: 50, minHeight: 170, backgroundColor: colors.background}]}>
                         <View style={{ padding: 15 }}>
                             <Text style={{ fontWeight: 'bold', fontSize: 20, color: colors.text }}>Sửa nhóm từ</Text>
                             <TextInput
-                                style={{ borderBottomWidth: 1, borderBottomColor: '#cccccc', alignItems: 'center', justifyContent: 'center' }}
+                                style={{ borderBottomWidth: 1, borderBottomColor: '#cccccc', alignItems: 'center', justifyContent: 'center', color: colors.text }}
                                 placeholder="Nhập nhóm từ cần lưu"
                                 placeholderTextColor={colors.text_of_input}
                                 value={newVocu}
@@ -686,6 +686,7 @@ const VocabularyScreen = ({ navigation }) => {
 
                 </Modal>
             </View>
+            
 
 
 

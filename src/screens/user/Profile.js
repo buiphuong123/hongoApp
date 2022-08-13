@@ -10,6 +10,8 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import ImagePicker from 'react-native-image-crop-picker';
 import { useTheme } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ScrollView } from 'react-native-gesture-handler';
+import { showToastError, showToastSuccess } from '../../helpers/toastHelper';
 
 const Profile = ({ navigation, route }) => {
     const { colors } = useTheme();
@@ -30,11 +32,11 @@ const Profile = ({ navigation, route }) => {
     const wordoptions = ["N5", "N4", "N3", "N2"];
     const [check, setCheck] = useState(false);
     useEffect(() => {
-        console.log('user vao profile ne ', user);
+        console.log('user vao profile ne ', user.level);
         setUsername(user.username);
         setEmail(user.email);
         setHobby(user.hobby !== undefined ? user.hobby : "");
-        setLevel(user.level !== undefined ? user.level : "N5...");
+        setLevel(user.level !== undefined ? user.level : "N5");
         if (user._id === users._id) {
             console.log(user._id, users._id);
             setType(true);
@@ -193,9 +195,13 @@ const Profile = ({ navigation, route }) => {
                 .then((response) => {
                     console.log(response.data);
                     if (response.data.code === 1) {
+                        showToastSuccess(response.data.mess);
                         users.password = response.data.user.password;
                         dispatch(loginUserSuccess(users));
 
+                    }
+                    else {
+                        showToastError(response.data.mess);
                     }
                 })
                 .catch(function (error) {
@@ -204,7 +210,7 @@ const Profile = ({ navigation, route }) => {
         }
     }
     return (
-        <View>
+        <ScrollView>
             <View>
                 <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => navigation.goBack()}>
                     <Icon name={'arrow-back'} size={29} style={{ marginLeft: 5, color: colors.text }} />
@@ -248,7 +254,7 @@ const Profile = ({ navigation, route }) => {
                             type === true ?
                                 editRequire === true ?
                                     <TouchableOpacity
-                                        onPress={() => setEditRequire(false)}
+                                        onPress={() => {setEditRequire(false); setHobby(user.hobby !== undefined ? user.hobby : "");user.level !== undefined ? user.level : "N5"}}
                                         style={{ justifyContent: 'flex-end', flexDirection: 'row', margin: 10 }}>
                                         <Text style={{ color: colors.text }}>Hủy</Text>
                                     </TouchableOpacity>
@@ -294,7 +300,7 @@ const Profile = ({ navigation, route }) => {
                                             dropdownStyle={{ backgroundColor: colors.dropdown }}
                                             defaultValue={level}
                                             buttonStyle={{ width: '30%', height: 30, backgroundColor: colors.background, fontWeight: 'bold' }}
-                                            buttonTextStyle={{ backgroundColor: colors.background, color: colors.text, fontWeight: 'bold', marginRight: '-60%', marginTop: 0, fontSize: 15 }}
+                                            buttonTextStyle={{ backgroundColor: colors.background, color:user.level!== undefined? colors.text: 'gray', fontWeight: 'bold', marginRight: '-60%', marginTop: 0, fontSize: 15 }}
                                         />
                                         :
                                         <TextInput
@@ -393,7 +399,7 @@ const Profile = ({ navigation, route }) => {
                         />
                         {data.isMatch ? null :
                             <Animated.View animation="fadeInLeft" duration={500}>
-                                <Text style={styles.errorMsg} >Password not match</Text>
+                                <Text style={styles.errorMsg} >Mật khẩu không trùng khớp</Text>
                             </Animated.View>
                         }
 
@@ -405,7 +411,7 @@ const Profile = ({ navigation, route }) => {
                     </View>
                 }
             </View>
-        </View>
+        </ScrollView>
     )
 }
 export default Profile;
